@@ -1,10 +1,17 @@
 ---
 
 # Setting up SAMBA for the Pi Print Server
-hosts: all
+- hosts: dads_rpi
+  become: true
   tasks:
-    
 
-    - name: Restart SAMBA
+    - name: Find Scanner
+      shell: "sane-find-scanner"
+      register: out
+
+    - debug: msg="{{ out.stdout }}"
+
+    - 
+
 
     

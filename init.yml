@@ -15,10 +15,14 @@
   become: true
   tasks:
 
+  - name: Install HPLIPS
+    apt:
+      name: hplip
+
   - name: Install CUPS
     apt:
       name: cups
-      state: present
+      state: latest
   
   - name: Add pi to ipadmin group
     shell: "usermod -a -G lpadmin pi"
@@ -36,3 +40,42 @@
   
   - name: Restart SAMBA
     shell: "/etc/init.d/samba restart"
+
+# Install Sane (Scanner)
+  - name: Install Scanner 
+    apt:
+      name: sane
+
+  - name: Change Run to yes
+    - lineinfile:
+      path: /etc/default/saned
+      regexp: '^RUN='
+      line: 'RUN=yes'
+
+  - name: Change Run to yes
+    - lineinfile:
+      path: /etc/sane.d/saned.conf
+      line: '192.168.1.0/24'
+
+  - name: Change Run to yes
+    - lineinfile:
+      path: /etc/sane.d/saned.conf
+      regexp: '#data_portrange = 10000 - 10100'
+      line: 'data_portrange = 10000 - 10100'
+
+  - name: Adding existing user 'pi' to group pl
+    user:
+      name: 'pi'
+      groups: pl
+      append: yes
+
+  - name: Start saned service
+    shell:
+    - 'service saned restart'
+    - update-rc.d saned defaults
+
+  
+
+      
+
+
