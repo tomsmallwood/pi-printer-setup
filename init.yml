@@ -1,0 +1,38 @@
+---
+
+# Distribute SSH keys
+# hosts: nullHost
+# vars:
+#     ssh_key: '~/.ssh/id_rsa/'
+#     tasks:
+#         - name: copy ssh key
+#             authorized_key:
+#                 key: "{{ lookup('file', ssh_key) }}"
+#             user: root 
+
+# Install Raspberry Pi Print Server Software
+- hosts: dads_rpi
+  become: true
+  tasks:
+
+  - name: Install CUPS
+    apt:
+      name: cups
+      state: present
+  
+  - name: Add pi to ipadmin group
+    shell: "usermod -a -G lpadmin pi"
+
+  - name: Set cupsctl to allow traffic
+    shell: "cupsctl --remote-any"
+
+  - name: Restart cups
+    shell: "/etc/init.d/cups restart"
+  
+  - name: Install Samba
+    apt:
+      name: samba
+      state: latest
+  
+  - name: Restart SAMBA
+    shell: "/etc/init.d/samba restart"

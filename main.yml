@@ -1,0 +1,10 @@
+---
+
+# Setting up SAMBA for the Pi Print Server
+hosts: all
+  tasks:
+    
+
+    - name: Restart SAMBA
+
+    
